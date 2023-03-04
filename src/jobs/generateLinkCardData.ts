@@ -4,6 +4,12 @@ import { extractLinkCardData, parseMdToMdast } from "../utils/markdown";
 import { fetchSEOData } from "../utils/headlessBrowser";
 
 const CONTENT_DIR = "./contents"
+const OUTPUT_DIR = "./public"
+
+const OGP_IMG_DIR_PATH = path.join(OUTPUT_DIR, "ogp");
+await rm(OGP_IMG_DIR_PATH, { recursive: true, force: true });
+await mkdir(OGP_IMG_DIR_PATH, { recursive: true });
+
 
 const articles = await readdir(CONTENT_DIR);
 console.log(articles)

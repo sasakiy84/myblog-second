@@ -90,7 +90,7 @@ export const fetchSEOData = async (
       console.log("get ogp");
 
       const fileBaseName = Buffer.from(url).toString("base64")
-      const ogpPath = path.join("/ogp", `${fileBaseName}.webp`)
+      const ogpPath = path.join("public", "ogp", `${fileBaseName}.webp`)
       if (!ogpURL) {
         console.log("caputure screenshot")
         await page.screenshot({
@@ -101,7 +101,7 @@ export const fetchSEOData = async (
 
       result.push({
         title,
-        ogpURL: ogpURL || ogpPath,
+        ogpURL: ogpURL || `/ogp/${fileBaseName}.webp`,
         description,
         url,
       });

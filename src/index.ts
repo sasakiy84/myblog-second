@@ -1,4 +1,4 @@
-import { readdir, readFile, writeFile } from "fs/promises";
+import { mkdir, readdir, readFile, rm, writeFile } from "fs/promises";
 import { toHtml } from "hast-util-to-html";
 import { toHast } from "mdast-util-to-hast";
 import path from "path";
@@ -41,8 +41,11 @@ const htmls = hasts.map(({ hast, meta }) => {
   }
 })
 
+const ARTICLE_DIR_PATH = path.join(OUTPUT_DIR, "articles");
+await rm(ARTICLE_DIR_PATH, { recursive: true, force: true });
+await mkdir(ARTICLE_DIR_PATH, { recursive: true });
 const template = await readFile(path.join("src", "views", "template.html"), { encoding: "utf-8" })
-await Promise.all(htmls.map(({ html, meta }) => {
+await Promise.all(htmls.map(async ({ html, meta }) => {
 
   const tagsHTML: string = meta.tags?.map((tag: string) => {
     return `<span>${tag}</span>`
@@ -54,7 +57,8 @@ await Promise.all(htmls.map(({ html, meta }) => {
     .replaceAll("{{ description }}", meta.description)
     .replaceAll("{{ tags }}", tagsHTML)
 
-  return writeFile(path.join(OUTPUT_DIR, "articles", `${meta.fileName}.html`), embededHTML)
+  await mkdir(path.join(ARTICLE_DIR_PATH, meta.fileName), { recursive: true });
+  return writeFile(path.join(ARTICLE_DIR_PATH, meta.fileName, "index.html"), embededHTML)
 }))
 
 const homeTemplate = await readFile(path.join("src", "views", "home.html"), { encoding: "utf-8" })
@@ -68,7 +72,7 @@ const articlesHTML = htmls
   .map(({ meta }) => {
 
     return `
-    <a href="/articles/${meta.fileName}.html" class="article-card">
+    <a href="/articles/${meta.fileName}/" class="article-card">
       <p class="title">
         ${meta.title}
       </p>
