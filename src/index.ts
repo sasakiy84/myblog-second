@@ -14,7 +14,7 @@ const markdownTexts = await Promise.all(contentFileNames.map((fileName) => {
 }))
 
 const mdasts = markdownTexts.map((text) => parseMdToMdast(text))
-const hasts = mdasts.map((mdast) => {
+const hasts = mdasts.map((mdast, index) => {
 
   const hast = toHast(mdast, {
     handlers: {
@@ -24,13 +24,15 @@ const hasts = mdasts.map((mdast) => {
     }
   })
   const meta = extractMetaData(mdast)
+  const fileName = path.basename(contentFileNames[index], path.extname(contentFileNames[index]))
+  meta.fileName = fileName
   return {
     hast, meta
   }
 })
 
 const htmls = hasts.map(({ hast, meta }) => {
-  const html = hast
+  const html: string = hast
     ? toHtml(hast)
     : ""
 
@@ -40,32 +42,40 @@ const htmls = hasts.map(({ hast, meta }) => {
 })
 
 const template = await readFile(path.join("src", "views", "template.html"), { encoding: "utf-8" })
-await Promise.all(htmls.map(({ html, meta }, index) => {
-  const fileName = path.basename(contentFileNames[index], path.extname(contentFileNames[index]))
+await Promise.all(htmls.map(({ html, meta }) => {
 
-  const tagsHTML = meta.tags?.map((tag: string) => {
+  const tagsHTML: string = meta.tags?.map((tag: string) => {
     return `<span>${tag}</span>`
   }).join("")
 
-  const embededHTML = template
+  const embededHTML: string = template
     .replace("{{ content }}", html)
     .replaceAll("{{ title }}", meta.title)
     .replaceAll("{{ description }}", meta.description)
     .replaceAll("{{ tags }}", tagsHTML)
 
-  return writeFile(path.join(OUTPUT_DIR, "articles", `${fileName}.html`), embededHTML)
+  return writeFile(path.join(OUTPUT_DIR, "articles", `${meta.fileName}.html`), embededHTML)
 }))
 
 const homeTemplate = await readFile(path.join("src", "views", "home.html"), { encoding: "utf-8" })
-const articlesHTML = htmls.map(({ meta }, index) => {
-  const fileName = path.basename(contentFileNames[index], path.extname(contentFileNames[index]))
+const articlesHTML = htmls
+  .sort((({ meta: metaA }, { meta: metaB }) => {
+    const createdAtA = Date.parse(metaA.createdAt)
+    const createdAtB = Date.parse(metaB.createdAt)
 
-  return `
-  <p>
-    <a href="/articles/${fileName}.html">
-      ${meta.title}
+    return createdAtB - createdAtA
+  }))
+  .map(({ meta }) => {
+
+    return `
+    <a href="/articles/${meta.fileName}.html" class="article-card">
+      <p class="title">
+        ${meta.title}
+      </p>
+      <p class="description">
+        ${meta.description}
+      </p>
     </a>
-  </p>
   `
-}).join("")
+  }).join("")
 await writeFile(path.join(OUTPUT_DIR, "index.html"), homeTemplate.replace("{{ articles }}", articlesHTML))
