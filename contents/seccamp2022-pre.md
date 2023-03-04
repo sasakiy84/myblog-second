@@ -1,8 +1,8 @@
 ---
 title: セキュリティキャンプ2022の経緯と選考課題
 description: セキュリティキャンプ2022 の Web セキュリティクラスに参加できることになりました。応募した経緯や理由と、選考課題の回答を公開します。
-createdAt: 2022-08-12
-updatedAt: 2022-08-12
+createdAt: 2022-08-11
+updatedAt: 2022-08-11
 tags:
   - EventReport
   - Security
