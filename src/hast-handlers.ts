@@ -5,17 +5,7 @@ import path from "path"
 import { createStarryNight, all } from '@wooorm/starry-night'
 import type { ElementContent } from "hast"
 
-
-export const paragraphHandler: Handler = (state, node) => {
-  return {
-    type: "element",
-    tagName: "p-custom",
-    properties: {},
-    children: state.all(node)
-  }
-}
-
-export const inlineCodeHandler: Handler = (state, node) => {
+export const inlineCodeHandler: Handler = (_state, node) => {
   const text: Text = { type: 'text', value: node.value.replace(/\r?\n|\r/g, ' ') }
   return {
     type: "element",
@@ -26,7 +16,7 @@ export const inlineCodeHandler: Handler = (state, node) => {
 }
 
 const starryNight = await createStarryNight(all)
-export const codeBlockHandler: Handler = (state, node) => {
+export const codeBlockHandler: Handler = (_state, node) => {
   const scope = starryNight.flagToScope(node.lang ?? "");
   if (scope === undefined) return {
     tagName: "pre",
@@ -72,12 +62,14 @@ const linkMetaData: {
 export const linkHandler: Handler = (state, node) => {
   const meta = linkMetaData.find(v => v.url === node.url)
 
+  // ogp が無かったら普通のリンクにする
   if (meta === undefined || meta.ogpURL === "") {
     return {
       type: "element",
       tagName: "a",
       properties: {
         href: node.url,
+        target: "_blank"
       },
       children: state.all(node)
     }

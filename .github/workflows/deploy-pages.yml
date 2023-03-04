@@ -1,9 +1,9 @@
-name: Deploy github pages workflow based on Jekyll example
+name: Deploy github pages
 
 on:
   # Runs on pushes targeting the default branch
-  # push:
-  #   branches: ["main"]
+  push:
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -23,6 +23,7 @@ jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -51,6 +52,7 @@ jobs:
 
   # Deployment job
   deploy:
+    timeout-minutes: 5
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

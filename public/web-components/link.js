@@ -62,6 +62,7 @@ class PreviewLink extends HTMLElement {
 
     const wrapperLink = document.createElement("a")
     wrapperLink.href = this.getAttribute("href")
+    wrapperLink.setAttribute("target", "_blank")
     wrapperLink.className = "wrapper"
 
     const title = this.getAttribute("title") || this.getAttribute("href")
