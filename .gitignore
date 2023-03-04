@@ -2,3 +2,4 @@ node_modules/
 public/articles/
 public/ogp/
 src/metadata/
+public/index.html
