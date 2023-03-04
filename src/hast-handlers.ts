@@ -61,6 +61,18 @@ const linkMetaData: {
 }[] = JSON.parse(data)
 export const linkHandler: Handler = (state, node) => {
   const meta = linkMetaData.find(v => v.url === node.url)
+  const isOneLine = node.position?.start.column === 1
+
+  if (isOneLine && /https?:\/\/twitter.com\/(.*?)\/status\/(.*?)\/?$/.test(node.url)) {
+    return {
+      type: "element",
+      tagName: "twitter-card",
+      properties: {
+        href: node.url
+      },
+      children: state.all(node)
+    }
+  }
 
   // ogp が無かったら普通のリンクにする
   if (meta === undefined || meta.ogpURL === "") {

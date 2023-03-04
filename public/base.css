@@ -10,7 +10,7 @@
 }
 
 .md-content p, .md-content a {
-  white-space: pre-wrap;
+  white-space: pre-line;
   word-wrap: break-word;
   line-height: 1.8;
 }
