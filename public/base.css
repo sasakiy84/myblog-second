@@ -56,6 +56,8 @@ div.tags span {
 
 .header {
   width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
   height: 60px;
   padding: 0.7rem 1.5rem;
   position: fixed;
@@ -66,6 +68,9 @@ div.tags span {
   box-sizing: border-box;
   border-bottom: 1px solid #eaecef;
   background-color: white;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
 }
 
 .header a {
@@ -80,6 +85,11 @@ div.tags span {
   padding: 0.1rem;
   box-sizing: border-box;
   margin-right: 12px;
+}
+.logo-github {
+  height: 80%;
+  padding: 0.1rem;
+  box-sizing: border-box;
 }
 
 .blog-title {
