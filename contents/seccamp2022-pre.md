@@ -71,7 +71,7 @@ tags:
 セキュリティキャンプは、選考課題の解答を公開する文化があるらしいです。応募中はそのことを知らず、自分がお世話になる機会はありませんでしたが、来年度以降活用してくれる人がいるかもしれないので公開しておきます。ようするに、これがこの記事を書いた目的です。
 
 ↓ 課題文
-https://www.ipa.go.jp/jinzai/security-camp/2022/zenkoku/qv6pgp0000002518-att/000097398.txt
+https://www.ipa.go.jp/jinzai/security-camp/2022/zenkoku/qv6pgp0000002518-att/000097399.txt
 
 誤字脱字等は修正せずに公開します。
 
